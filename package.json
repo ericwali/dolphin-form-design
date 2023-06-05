@@ -1,0 +1,73 @@
+{
+  "name": "dolphin-form-design",
+  "version": "0.0.0",
+  "description": "A vue based form designer component",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint packages",
+    "lib": "vue-cli-service build --target lib --name loquat-form-design --dest lib --formats umd-min index.js",
+    "svgo": "svgo -f packages/assets/icons/svg --config=packages/assets/icons/svgo.yml"
+  },
+  "files": [
+    "es",
+    "lib",
+    "types",
+    "packages",
+    "styles",
+    "helper",
+    "scripts"
+  ],
+  "dependencies": {
+    "js-beautify": "^1.14.3",
+    "loquat-axios": "^1.0.1",
+    "vue3-ace-editor": "^2.2.2",
+    "vuedraggable": "^2.24.3"
+  },
+  "main": "lib/index.common.js",
+  "module": "es/index.esm.js",
+  "unpkg": "lib/index.umd.js",
+  "jsdelivr": "lib/index.umd.js",
+  "style": "lib/style.css",
+  "typings": "types/index.d.ts",
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.12",
+    "@vue/cli-plugin-eslint": "^4.5.12",
+    "@vue/cli-service": "^4.5.12",
+    "axios": "^0.21.1",
+    "babel-eslint": "^10.1.0",
+    "core-js": "^3.11.0",
+    "element-ui": "^2.15.1",
+    "eslint": "^7.24.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.32.13",
+    "sass-loader": "^10.2.0",
+    "svg-sprite-loader": "^6.0.11",
+    "svgo": "^1.2.0",
+    "vue": "^2.6.14",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "repository": {
+    "type": "github",
+    "url": "git+https://github.com/wangxiang4/dolphin-form-design.git"
+  },
+  "keywords": [
+    "dolphin",
+    "from-design",
+    "dolphin-from-design"
+  ],
+  "author": {
+    "name": "wangxaing4",
+    "email": "github.wangxiang4@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangxiang4/dolphin-form-design/issues"
+  },
+  "homepage": "https://godolphinx.org/"
+}
