@@ -32,10 +32,10 @@ which does not accept any commercialization and is completely free and open sour
 Everyone can develop software quickly and efficiently.
 
 ## ✨ Feature
-- A vue based form designer component
+- A vue3 And Typescript based form designer component
 
 ## <img width="28" style="vertical-align:middle" src="https://godolphinx.org/images/hacktoberfest-logo.svg"> Hacker Day
-加入[Github HackToberFest](https://hacktoberfest.com/) Start contributing to this project.
+Join[Github HackToberFest](https://hacktoberfest.com/) Start contributing to this project.
 
 ## 🤔 Discuss together
 Join [Discord](https://discord.gg/DREuQWrRYQ) Start communicating with everyone。
