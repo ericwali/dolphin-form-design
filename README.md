@@ -38,7 +38,7 @@ Everyone can develop software quickly and efficiently.
 Join[Github HackToberFest](https://hacktoberfest.com/) Start contributing to this project.
 
 ## 🤔 Discuss together
-Join [Discord](https://discord.gg/DREuQWrRYQ) Start communicating with everyone。
+Join [Discord](https://discord.gg/DREuQWrRYQ) Start communicating with everyone.
 
 ## 🤗 Become a member of the development team！
 Welcome😀! We are looking for talented developers to join us and make the Dolphin development platform even better! 
@@ -50,4 +50,4 @@ You can use Gitpod, an online IDE (open source free) to contribute or run exampl
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/wangxiang4/dolphin-form-design)
 
 ## 📄 Licenses
-[Dolphin Development Platform is MIT licensed](https://github.com/wangxiang4/dolphin-form-design/blob/master/LICENSE) of open source software。
+[Dolphin Development Platform is MIT licensed](https://github.com/wangxiang4/dolphin-form-design/blob/master/LICENSE) of open source software.

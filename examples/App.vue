@@ -20,7 +20,7 @@ export default {
             title: '分割线',
             type: 'custom',
             component: 'el-divider',
-            icon: 'iconfont icon-divider',
+            icon: 'icon icon-divider',
             label: '',
             propExclude: true,
             labelWidth: 0,
