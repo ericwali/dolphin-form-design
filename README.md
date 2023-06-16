@@ -35,7 +35,7 @@ Everyone can develop software quickly and efficiently.
 - A vue3 And Typescript based form designer component
 
 ## <img width="28" style="vertical-align:middle" src="https://godolphinx.org/images/hacktoberfest-logo.svg"> Hacker Day
-Join[Github HackToberFest](https://hacktoberfest.com/) Start contributing to this project.
+Join [Github HackToberFest](https://hacktoberfest.com/) Start contributing to this project.
 
 ## 🤔 Discuss together
 Join [Discord](https://discord.gg/DREuQWrRYQ) Start communicating with everyone.

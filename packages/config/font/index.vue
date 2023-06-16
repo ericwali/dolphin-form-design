@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { originComponentName } from '@utils'
+import { originComponentName } from '@tools'
 import permission from '@/config/perm'
 export default {
   name: 'Font',

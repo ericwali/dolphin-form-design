@@ -8,7 +8,7 @@
  * @create: 2021-11-25
  */
 
-import { objectEach } from '@/utils/index'
+import { objectEach } from '@/tools/index'
 
 /**
  * 创建数据仓库

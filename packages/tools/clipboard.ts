@@ -1,34 +1,19 @@
-/**
- * @program: loquat-form-design
- *
- * @description: 利用浏览器命令执行复制
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-07-10
- */
 
-function select (element) {
+function select (element: HTMLTextAreaElement) {
   let selectedText
-
   if (element.nodeName === 'SELECT') {
     element.focus()
-
     selectedText = element.value
   } else if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
     const isReadOnly = element.hasAttribute('readonly')
-
     if (!isReadOnly) {
       element.setAttribute('readonly', '')
     }
-
     element.select()
     element.setSelectionRange(0, element.value.length)
-
     if (!isReadOnly) {
       element.removeAttribute('readonly')
     }
-
     selectedText = element.value
   } else {
     if (element.hasAttribute('contenteditable')) {

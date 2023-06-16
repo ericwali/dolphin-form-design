@@ -35,7 +35,7 @@
  *
  * @create: 2021-07-12
  */
-import { pathFormat } from '@utils'
+import { pathFormat } from '@tools'
 export default {
   update (el, binding) {
     const { value } = binding

@@ -186,7 +186,7 @@
 <script>
 import permission from '@/config/perm'
 import GlobalConfig from '@/global/config'
-import { originComponentName, validateNull, get, deepClone } from '@utils'
+import { originComponentName, validateNull, get, deepClone } from '@tools'
 export default {
   name: 'ChildForm',
   inject: ['designProvide'],

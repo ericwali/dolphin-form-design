@@ -1,6 +1,6 @@
 import beautifier from '@utils/jsonBeautifier'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
-import { deepClone } from '@utils'
+import { deepClone } from '@tools'
 
 export default {
   data () {

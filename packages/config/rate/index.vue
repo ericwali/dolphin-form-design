@@ -118,7 +118,7 @@
 <script>
 import pluginRate from '@/plugins/rate'
 import GlobalConfig from '@/global/config'
-import { originComponentName, validateNull, get, deepClone } from '@utils'
+import { originComponentName, validateNull, get, deepClone } from '@tools'
 import permission from '@/config/perm'
 export default {
   name: 'Rate',

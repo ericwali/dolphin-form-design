@@ -23,10 +23,10 @@
 <script>
 import { formClearVal, formInitVal, designTransformPreview } from '@utils/dataFormat'
 import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
-import { randomId8, deepClone, validateNull, getObjType } from '@utils'
+import { randomId8, deepClone, validateNull, getObjType } from '@tools'
 import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
-import { setPx } from '@utils'
+import { setPx } from '@tools'
 export default {
   name: 'Form',
   provide () {

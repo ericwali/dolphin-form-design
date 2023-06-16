@@ -112,7 +112,7 @@
 import permission from '@/config/perm'
 import pluginInputColor from '@/plugins/input-color'
 import GlobalConfig from '@/global/config'
-import { originComponentName, validateNull, get, deepClone } from '@utils'
+import { originComponentName, validateNull, get, deepClone } from '@tools'
 export default {
   name: 'InputColor',
   components: { pluginInputColor },

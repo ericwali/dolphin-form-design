@@ -17,6 +17,8 @@ import {
 } from '@/global/regex'
 import random from '@utils/random'
 
+import type { DolphinFieldsGroupProps, WidgetFormDefaultConfig, JsonOptionDefaultConfig, DataSource } from '../../types/form-design/setup'
+
 import GlobalConfig from '@/global/config'
 
 /** 设置px像素 */
@@ -199,12 +201,12 @@ export function urlJoin (base, url) {
 }
 
 /** 获取部件表单默认配置 */
-export function getWidgetFormDefaultConfig () {
+export function getWidgetFormDefaultConfig (): WidgetFormDefaultConfig {
   return deepClone(GlobalConfig.widgetFormDefaultConfig)
 }
 
 /** 获取json选项默认配置 */
-export function getJsonOptionDefaultConfig () {
+export function getJsonOptionDefaultConfig (): JsonOptionDefaultConfig {
   return deepClone(GlobalConfig.jsonOptionDefaultConfig)
 }
 

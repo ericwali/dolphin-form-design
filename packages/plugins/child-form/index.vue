@@ -65,7 +65,7 @@
 import tablePage from './page'
 import column from './column'
 import columnDefault from './columnDefault'
-import { deepClone, randomId8, validateNull, setPx, getObjType } from '@utils'
+import { deepClone, randomId8, validateNull, setPx, getObjType } from '@tools'
 import { insertCss, parseCss } from '@utils/dom'
 import { DEFAULT_CONFIG_INSIDE_CHILD_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
 import { designTransformPreview, formInitVal } from '@utils/dataFormat'

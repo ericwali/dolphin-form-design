@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { validateNull } from '@utils'
+import { validateNull } from '@tools'
 import pluginEmpty from '@/plugins/empty'
 import { getComponentConfig } from '@utils/dataFormat'
 export default {

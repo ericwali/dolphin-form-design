@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { detailDataType } from '@utils'
+import { detailDataType } from '@tools'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Input',

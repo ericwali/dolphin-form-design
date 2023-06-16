@@ -24,7 +24,7 @@
 
 <script>
 import { bindEvent } from '@utils/plugins'
-import { validateNull } from '@utils'
+import { validateNull } from '@tools'
 export default {
   name: 'Time',
   props: {

@@ -77,7 +77,7 @@
 import packages from '@utils/packages'
 import { bindEvent } from '@utils/plugins'
 import { DIC_PROPS } from '@/global/variable'
-import { validateNull } from '@utils'
+import { validateNull } from '@tools'
 export default {
   name: 'Select',
   props: {

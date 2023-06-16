@@ -23,7 +23,7 @@
 
 <script>
 import { getComponent, getPlaceholder, clearTransformColumnDirtyData } from '@utils/dataFormat'
-import { getObjType, deepClone, validateNull } from '@utils'
+import { getObjType, deepClone, validateNull } from '@tools'
 export default {
   name: 'Widget',
   props: {

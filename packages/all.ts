@@ -2,7 +2,7 @@ import Configs from './config'
 import Plugins from './plugins'
 import FormDesign from './index.vue'
 import permission from './directive'
-import { kebabCase } from '@utils'
+import { kebabCase } from '@tools'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import { setup } from './core'
 
@@ -20,4 +20,4 @@ export function install (Vue, options = {}) {
 }
 
 export * from './core'
-export * from './utils/provide'
+export * from './tools/provide'

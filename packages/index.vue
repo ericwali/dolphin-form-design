@@ -643,7 +643,7 @@ import pluginForm from '@/plugins/form'
 import pluginChildForm from '@/plugins/child-form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import GlobalConfig from './global/config'
-import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
+import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@tools'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import SvgIcon from '@components/Helper/SvgIcon'
 export default {

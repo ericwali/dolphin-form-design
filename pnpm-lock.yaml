@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@iconify/json': ^2.1.30
   '@purge-icons/generated': ^0.8.1
+  '@types/js-beautify': ^1.13.3
   '@types/node': ^20.2.5
   '@typescript-eslint/eslint-plugin': ^5.4.0
   '@typescript-eslint/parser': ^5.4.0
@@ -47,6 +48,7 @@ specifiers:
 devDependencies:
   '@iconify/json': 2.2.74
   '@purge-icons/generated': 0.8.1
+  '@types/js-beautify': 1.13.3
   '@types/node': 20.2.5
   '@typescript-eslint/eslint-plugin': 5.59.9_vccnnyklookm5cpxe7h4hqmj6m
   '@typescript-eslint/parser': 5.59.9_sgaiclxgc5mltnpgmg7py4v6ca
@@ -697,6 +699,10 @@ packages:
     resolution: {integrity: sha512-xEn5+M3lDBtI3JxLy6eU3ksoVurygnlG7OYhTqJfGGP4PcvYnfn+IABCmMve7ziM/SneHDm5xgJFKC8hCYPicw==}
     dependencies:
       '@types/node': 20.2.5
+    dev: true
+
+  /@types/js-beautify/1.13.3:
+    resolution: {integrity: sha512-ucIPw5gmNyvRKi6mpeojlqp+T+6ZBJeU+kqMDnIEDlijEU4QhLTon90sZ3cz9HZr+QTwXILjNsMZImzA7+zuJA==}
     dev: true
 
   /@types/json-schema/7.0.12:

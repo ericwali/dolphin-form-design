@@ -184,9 +184,9 @@
 
 <script>
 import GlobalConfig from '@/global/config'
-import { originComponentName } from '@utils'
+import { originComponentName } from '@tools'
 import permission from '@/config/perm'
-import { get, validateNull, deepClone } from '@utils'
+import { get, validateNull, deepClone } from '@tools'
 export default {
   name: 'Cascader',
   inject: ['designProvide'],

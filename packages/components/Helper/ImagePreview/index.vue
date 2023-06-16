@@ -64,7 +64,7 @@
 </template>
 <script>
 import { TYPE_LIST } from '@/global/variable'
-import { setPx } from '@utils'
+import { setPx } from '@tools'
 export default {
   name: 'ImagePreview',
   data () {

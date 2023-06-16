@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { isExternal } from '@utils'
+import { isExternal } from '@tools'
 
 export default {
   name: 'SvgIcon',

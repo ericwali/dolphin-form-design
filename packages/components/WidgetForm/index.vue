@@ -38,7 +38,7 @@
 import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
-import { setPx } from '@utils'
+import { setPx } from '@tools'
 import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {

@@ -8,7 +8,7 @@
  * @create: 2021-08-04
  */
 
-import { randomId8, dataURLtoFile } from '@utils'
+import { randomId8, dataURLtoFile } from '@tools'
 
 /**
  * 全局大水印

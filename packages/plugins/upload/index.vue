@@ -70,7 +70,7 @@ import axios from 'loquat-axios'
 import GlobalConfig from '@/global/config'
 import { detailImg } from '@utils/watermark'
 import ImagePreview from '@components/Helper/ImagePreview'
-import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone, getObjType } from '@utils'
+import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone, getObjType } from '@tools'
 import { UPLOAD_CONFIG_PROPS, TYPE_LIST } from '@/global/variable'
 export default {
   name: 'Upload',

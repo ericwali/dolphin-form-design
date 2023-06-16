@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { validateNull } from '@utils'
+import { validateNull } from '@tools'
 import widget from '../form/widget'
 export default {
   name: 'ColumnSlot',

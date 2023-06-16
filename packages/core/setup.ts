@@ -9,7 +9,7 @@
  */
 
 import GlobalConfig from '@/global/config'
-import { assign } from '@utils'
+import { assign } from '@tools'
 
 /**
  * 全局参数设置

@@ -259,7 +259,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import GlobalConfig from '@/global/config'
-import { originComponentName, validateNull, get, deepClone } from '@utils'
+import { originComponentName, validateNull, get, deepClone } from '@tools'
 import permission from '@/config/perm'
 export default {
   name: 'Select',

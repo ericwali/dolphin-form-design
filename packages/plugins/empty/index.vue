@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { setPx } from '@utils'
+import { setPx } from '@tools'
 export default {
   name: 'Empty',
   props: {
