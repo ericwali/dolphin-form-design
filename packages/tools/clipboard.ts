@@ -1,5 +1,10 @@
 
-function select (element: HTMLTextAreaElement) {
+/**
+ * Select element Text
+ * @param element
+ * @return text
+ */
+export function select (element: HTMLTextAreaElement) {
   let selectedText
   if (element.nodeName === 'SELECT') {
     element.focus()
@@ -19,21 +24,24 @@ function select (element: HTMLTextAreaElement) {
     if (element.hasAttribute('contenteditable')) {
       element.focus()
     }
-
     const selection = window.getSelection()
     const range = document.createRange()
-
     range.selectNodeContents(element)
-    selection.removeAllRanges()
-    selection.addRange(range)
-
-    selectedText = selection.toString()
+    selection?.removeAllRanges()
+    selection?.addRange(range)
+    selectedText = selection?.toString()
   }
-
   return selectedText
 }
 
-export default function ({ text }) {
+
+/**
+ * Browser clipboard
+ * @param text
+ */
+export default function ({ text }: {
+  text: string;
+}) {
   return new Promise((resolve, reject) => {
     const container = document.body
     const isRTL = document.documentElement.getAttribute('dir') == 'rtl'
@@ -52,7 +60,7 @@ export default function ({ text }) {
     select(fakeElem)
     try {
       document.execCommand('copy')
-      resolve()
+      resolve('success')
     } catch (err) {
       reject()
     }

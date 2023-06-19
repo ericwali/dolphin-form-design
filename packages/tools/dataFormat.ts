@@ -17,7 +17,7 @@ import {
   BOOLEAN_VALUE_TYPES,
   REMOTE_REQUEST_TYPES,
   KEY_COMPONENT_CONFIG_NAME
-} from '@/global/variable'
+} from '../global/variable'
 import GlobalConfig from '@/global/config'
 import { remoteOption, remoteFunc } from '@/core'
 import { validateNull, setPx, deepClone, getObjType, randomId8, kebabCase } from './index'
