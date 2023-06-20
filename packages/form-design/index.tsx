@@ -1,6 +1,6 @@
 import { defineComponent, computed, unref, reactive } from 'vue';
 import { FormDesignReactData } from '../../types/form-design'
-import GlobalConfig from '../global/config'
+import GlobalConfig from '../global/widget-config'
 import { getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from '../tools'
 import codeBeautifier from 'js-beautify';
 

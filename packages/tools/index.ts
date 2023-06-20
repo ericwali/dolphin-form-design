@@ -1,29 +1,16 @@
-/**
- * @program: loquat-form-design
- *
- * @description: loquat工具类
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-07-15
- */
-import {
-  BASIC_LATIN_MAPPING, KEY_COMPONENT_CONFIG_NAME,
-  KEY_COMPONENT_NAME
-} from '@/global/variable'
-import {
-  RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS,
-  RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD
-} from '@/global/regex'
-import random from '@utils/random'
-
+import { LATIN_BURRING_MAPPING, KEY_WIDGET_CONFIG_NAME, KEY_COMPONENT_NAME } from '../form-design/src/constants'
+import { RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS, RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD } from '../form-design/src/constants/regex'
+import random from './random'
 import type { DolphinFieldsGroupProps, WidgetFormDefaultConfig, JsonOptionDefaultConfig, DataSource } from '../../types/form-design/setup'
+import GlobalConfig from '../form-design/src/constants/conf'
 
-import GlobalConfig from '@/global/config'
-
-/** 设置px像素 */
-export function setPx (val, defval = '') {
-  if (validateNull(val)) val = defval
+/**
+ * Set px pixels
+ * @param val set px value
+ * @return string
+ */
+export function setPx (val: number | string, defVal = ''): string {
+  if (validateNull(val)) val = defVal
   if (validateNull(val)) return ''
   val = val + ''
   if (val.indexOf('%') === -1) {
@@ -32,40 +19,45 @@ export function setPx (val, defval = '') {
   return val
 }
 
-/** 对象深拷贝 */
-export function deepClone (data) {
-  const type = getObjType(data)
-  let obj
+/**
+ * Deep copy of objects
+ * @param obj Clone object
+ * @return T new Object
+ */
+export function deepClone<T>(obj: T): T {
+  const type = getObjType(obj);
   if (type === 'array') {
-    obj = []
+    const newObj: any[] = [];
+    for (let i = 0, len = (obj as unknown as any[]).length; i < len; i++) {
+      if ((obj as unknown as any[])[i]) {
+        delete (obj as unknown as any[])[i].$parent;
+      }
+      newObj.push(deepClone((obj as unknown as any[])[i]));
+    }
+    return newObj as unknown as T;
   } else if (type === 'object') {
-    obj = {}
+    const newObj: any = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        delete (obj as any)[key].$parent;
+      }
+      newObj[key] = deepClone((obj as any)[key]);
+    }
+    return newObj;
   } else {
-    // 不再具有下一层次
-    return data
+    // No longer has the next level
+    return obj;
   }
-  if (type === 'array') {
-    for (let i = 0, len = data.length; i < len; i++) {
-      if (data[i]) {
-        delete data[i].$parent
-      }
-      obj.push(deepClone(data[i]))
-    }
-  } else if (type === 'object') {
-    for (const key in data) {
-      if (data) {
-        delete data.$parent
-      }
-      obj[key] = deepClone(data[key])
-    }
-  }
-  return obj
 }
 
-/** 获取对象类型 */
-export function getObjType (obj) {
+/**
+ * Get object type
+ * @param obj object
+ * @return string type strings
+ */
+export function getObjType(obj: any): string {
   const toString = Object.prototype.toString
-  const map = {
+  const map: { [key: string]: string } = {
     '[object Boolean]': 'boolean',
     '[object Number]': 'number',
     '[object String]': 'string',
@@ -84,23 +76,31 @@ export function getObjType (obj) {
   return map[toString.call(obj)]
 }
 
-/** 判断是否为空 */
-export function validateNull (val) {
-  // 特殊判断
-  if (val && parseInt(val) === 0) return false
-  const list = ['$parent']
-  if (val instanceof Date || typeof val === 'boolean' || typeof val === 'number') return false
+/**
+ * Determine if the value is null
+ * @param val value
+ * @return boolean
+ */
+export function validateNull(val: any): boolean {
+  // Special validate
+  if (val && parseInt(val) === 0) return false;
+  const list: string[] = ['$parent'];
+  if (val instanceof Date || typeof val === 'boolean' || typeof val === 'number') {
+    return false;
+  }
   if (val instanceof Array) {
-    if (val.length === 0) return true
-  } else if (val instanceof Object) {
-    val = deepClone(val)
-    list.forEach(ele => {
-      delete val[ele]
-    })
-    for (const o in val) {
-      return false
+    if (val.length === 0) {
+      return true;
     }
-    return true
+  } else if (val instanceof Object) {
+    val = deepClone(val);
+    list.forEach(ele => {
+      delete val[ele];
+    });
+    for (const o in val) {
+      return false;
+    }
+    return true;
   } else {
     if (
       val === 'null' ||
@@ -109,95 +109,133 @@ export function validateNull (val) {
       val === undefined ||
       val === ''
     ) {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
-  return false
+  return false;
 }
 
-/** 路径string格式转换为数组格式 */
-export function pathFormat (val) {
-  const result = []
+/**
+ * Parameter path formatting
+ * @param val a[0].b.c
+ * @return string[] (a,0,b,c)
+ */
+export function pathFormat(val: string): string[] {
+  const result: string[] = [];
   if (val.charCodeAt(0) === 46) {
-    result.push('')
+    result.push('');
   }
-  val.replace(RE_PROP_NAME, function (match, number, quote, subString) {
-    result.push(quote ? subString.replace(/\\(\\)?/g, '$1') : (number || match))
-  })
-  return result
+  val.replace(RE_PROP_NAME,  (match: string, number: string, quote: string, subString: string) => {
+    result.push(quote ? subString.replace(/\\(\\)?/g, '$1') : (number || match));
+    return '';
+  });
+  return result;
 }
 
-/** 获取对象值 */
-export function get (object, path, defaultValue) {
-  if (validateNull(path)) return object
-  path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
-  let index = 0
-  const length = path.length
+/**
+ * Get object value
+ * @param object
+ * @param path a[0].b.c
+ * @param defaultValue
+ * @return any
+ */
+export function get(object: any, path: string, defaultValue: any): any {
+  if (validateNull(path)) return object;
+  const pathArray = /^\w*$/.test(path) ? [path] : pathFormat(path);
+  let index = 0;
+  const length = pathArray.length;
   while (object != null && index < length) {
-    object = object[path[index++]]
+    object = object[pathArray[index++]];
   }
-  return object == null ? defaultValue : object
+  return object == null ? defaultValue : object;
 }
 
-/** 生成随机8位ID */
-export function randomId8 () {
+
+/** Generate a random 8-bit ID */
+export function randomId8(): string {
   return random(8)
 }
 
-/** 字符串数据类型转化 */
-export function detailDataType (value, type) {
+/**
+ * Data type formatting
+ * @param value data
+ * @param value format type
+ * @return T
+ */
+export function dataTypeFormat<T = any>(value: any, type: string): T {
   if (type === 'number') {
-    return Number(value)
+    return Number(value) as unknown as T;
   } else if (type === 'string') {
-    return value + ''
+    return String(value) as unknown as T;
   } else {
-    return value
+    return value as T;
   }
 }
 
-/** 将base64地址转换为文件 */
-export function dataURLtoFile (dataUrl, filename) {
-  const arr = dataUrl.split(',')
-  // 获取Base64类型
-  const mime = arr[0].match(/:(.*?);/)[1]
-  // 解码Base64
-  const buffStr = atob(arr[1])
-  let n = buffStr.length
-  // 将二进制数据转换为utf-8
-  const utf8Arr = new Uint8Array(n)
+/**
+ * Converting base64 addresses to files
+ * @param dataUrl Base64
+ * @param filename FileName
+ * @return File | null
+ */
+export function dataURLtoFile(dataUrl: string, filename: string): File | null {
+  const arr = dataUrl.split(',');
+  // Get the MIME type from the data URL
+  const mimeMatch = arr[0].match(/:(.*?);/);
+  if (!mimeMatch) {
+    return null;
+  }
+  const mime = mimeMatch[1];
+  // Decode the Base64 data
+  const buffStr = atob(arr[1]);
+  let n = buffStr.length;
+  // Convert binary data to UTF-8
+  const utf8Arr = new Uint8Array(n);
   while (n--) {
-    utf8Arr[n] = buffStr.charCodeAt(n)
+    utf8Arr[n] = buffStr.charCodeAt(n);
   }
   return new File([utf8Arr], filename, {
-    type: mime
-  })
+    type: mime,
+  });
 }
 
-/** 文件上传判断是否拼接根地址加子地址 */
-export function getFileUrl (home, uri) {
-  return getObjType(uri) === 'string'
-    ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri)
-    : ''
+
+/**
+ * Get file upload address
+ * @param home The root address.
+ * @param uri The sub-address.
+ * @returns The concatenated URL or an empty string.
+ */
+export function getFileUrl(home: string, uri: string): string {
+  return uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri);
 }
 
-/** 处理字节容量计算 */
-export function byteCapacityCompute (fileSize, unit) {
+/**
+ * Compute byte capacity based on the specified unit.
+ * @param fileSize The file size in bytes.
+ * @param unit The unit of measurement (KB, MB, GB).
+ * @returns The computed byte capacity.
+ */
+export function byteCapacityCompute(fileSize: number, unit: 'KB' | 'MB' | 'GB'): number {
   switch (unit) {
     case 'KB':
-      return fileSize / 1024
+      return fileSize / 1024;
     case 'MB':
-      return fileSize / 1024 / 1024
+      return fileSize / 1024 / 1024;
     case 'GB':
-      return fileSize / 1024 / 1024 / 1024
+      return fileSize / 1024 / 1024 / 1024;
   }
 }
 
-/** 处理url路径拼接是否自动加斜杠 */
-export function urlJoin (base, url) {
-  return (getObjType(base) === 'string' && getObjType(url) === 'string')
-    ? `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
-    : url
+/**
+ * Handle url path splicing with or without slash automatically
+ * @param base BaseUrl
+ * @param url  SubUrl
+ * @return string BaseUrlAndSubUrl
+ */
+export function urlJoin(base: string, url: string): string {
+  return `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
 }
 
 /** 获取部件表单默认配置 */

@@ -1,14 +1,3 @@
-/**
- * @program: loquat-form-design
- *
- * @description: 字段插件配置文件
- * 设计思路: 采用插件配置与表单设计器内部配置两者独立风格,互不影响,确保两者配置不会起冲突
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-10-4
- */
-
 export default [
   {
     title: '基础字段',

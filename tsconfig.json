@@ -15,9 +15,12 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
+      "node",
       "webpack-env",
-      "resize-observer-browser"
+      "resize-observer-browser",
+      "vite/client"
     ],
+    "typeRoots": ["./node_modules/@types/", "./types"],
     "paths": {
       "@/*": [
         "examples/*"
@@ -37,7 +40,7 @@
     "examples/**/*.tsx",
     "examples/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
   ],
   "exclude": [
     "node_modules"

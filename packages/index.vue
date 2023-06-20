@@ -642,7 +642,7 @@ import packages from '@utils/packages'
 import pluginForm from '@/plugins/form'
 import pluginChildForm from '@/plugins/child-form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
-import GlobalConfig from './global/config'
+import GlobalConfig from './global/widget-config'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@tools'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import SvgIcon from '@components/Helper/SvgIcon'
@@ -1051,7 +1051,7 @@ export default {
         thirdPartyAxios: false,
         headers: [],
         params: [],
-        requestFunc: 'return config;',
+        requestFunc: 'return widget-config;',
         responseFunc: 'return res;',
         errorFunc: ''
       }
@@ -1066,7 +1066,7 @@ export default {
       const dataSource = deepClone(this.widgetForm.dataSource.find(item => item.key === key))
       dataSource.headers = Object.entries(dataSource.headers).map(([k, v]) => ({ key: k, value: v }))
       dataSource.params = Object.entries(dataSource.params).map(([k, v]) => ({ key: k, value: v }))
-      !dataSource.requestFunc ? dataSource.requestFunc = 'return config;' : ''
+      !dataSource.requestFunc ? dataSource.requestFunc = 'return widget-config;' : ''
       !dataSource.responseFunc ? dataSource.responseFunc = 'return res;' : ''
       this.dataSourceForm = dataSource
       this.dataSourceMainContainerVisible = true
@@ -1093,7 +1093,7 @@ export default {
       this.dataSourceForm.name += '_copy'
       this.dataSourceForm.headers = Object.entries(this.dataSourceForm.headers).map(([k, v]) => ({ key: k, value: v }))
       this.dataSourceForm.params = Object.entries(this.dataSourceForm.params).map(([k, v]) => ({ key: k, value: v }))
-      !this.dataSourceForm.requestFunc ? this.dataSourceForm.requestFunc = 'return config;' : ''
+      !this.dataSourceForm.requestFunc ? this.dataSourceForm.requestFunc = 'return widget-config;' : ''
       !this.dataSourceForm.responseFunc ? this.dataSourceForm.responseFunc = 'return res;' : ''
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true

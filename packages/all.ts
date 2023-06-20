@@ -1,4 +1,4 @@
-import Configs from './config'
+import Configs from './widget-config'
 import Plugins from './plugins'
 import FormDesign from './index.vue'
 import permission from './directive'

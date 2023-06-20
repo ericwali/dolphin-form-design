@@ -67,7 +67,7 @@
 
 <script>
 import axios from 'loquat-axios'
-import GlobalConfig from '@/global/config'
+import GlobalConfig from '@/global/widget-config'
 import { detailImg } from '@utils/watermark'
 import ImagePreview from '@components/Helper/ImagePreview'
 import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone, getObjType } from '@tools'

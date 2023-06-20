@@ -1,38 +1,32 @@
-/**
- * @program: loquat-form-design
- *
- * @description: 签名加密七牛云OSS令牌
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-08-04
- */
+import { isDevMode } from './env'
+import CryptoJS from 'crypto-js'
 
-export function getToken (accessKey, secretKey, putPolicy) {
-  // SETP 1 : json格式化上传策略,https://developer.qiniu.com/kodo/1206/put-policy
+/** Get crypto qiniu token */
+export function getToken (accessKey: string, secretKey: string, putPolicy: Record<string, any>) {
+  // SETP 1 : Json formatted upload strategy https://developer.qiniu.com/kodo/1206/put-policy
   const _putPolicy = JSON.stringify(putPolicy)
-  process.env.NODE_ENV === 'development' && console && console.log('put_policy = ', _putPolicy)
+  isDevMode() && console && console.log('put_policy = ', _putPolicy)
 
-  // SETP 2 : 使用base64编码上传策略
+  // SETP 2 : Upload strategy using base64 encoding
   const encoded = base64encode(utf16to8(_putPolicy))
-  process.env.NODE_ENV === 'development' && console && console.log('encoded = ', encoded)
+  isDevMode() && console && console.log('encoded = ', encoded)
 
-  // SETP 3 : 使用加密JS-HmacSHA1签名认证加密
-  const hash = window.CryptoJS.HmacSHA1(encoded, secretKey)
-  const encodedSigned = hash.toString(window.CryptoJS.enc.Base64)
-  process.env.NODE_ENV === 'development' && console && console.log('encoded_signed=', encodedSigned)
+  // SETP 3 : Use encryption JS-HmacSHA1 signature authentication encryption
+  const hash = CryptoJS.HmacSHA1(encoded, secretKey)
+  const encodedSigned = hash.toString(CryptoJS.enc.Base64)
+  isDevMode() && console && console.log('encoded_signed=', encodedSigned)
 
-  // SETP 5 : 访问密钥拼接base64访问七牛云
+  // SETP 5 : Access key splicing base64 access to seven cows cloud
   const uploadToken = accessKey + ':' + safe64(encodedSigned) + ':' + encoded
-  process.env.NODE_ENV === 'development' && console && console.log('upload_token=', uploadToken)
+  isDevMode() && console && console.log('upload_token=', uploadToken)
 
   return uploadToken
 }
 
 export default getToken
 
-/** UTF16转换UTF8 */
-function utf16to8 (str) {
+/** UTF16 to UTF8 conversion */
+function utf16to8 (str: string) {
   let out, i, c
   out = ''
   const len = str.length
@@ -52,9 +46,8 @@ function utf16to8 (str) {
   return out
 }
 
-/** UTF8转换UTF16 */
-// eslint-disable-next-line no-unused-vars
-function utf8to16 (str) {
+/** UTF8 to UTF16 conversion */
+function utf8to16 (str: string) {
   let out, i, c
   let char2, char3
   out = ''
@@ -102,8 +95,8 @@ const base64DecodeChars = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -
   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1]
 
-/** base64编码 */
-function base64encode (str) {
+/** Base64 code  */
+function base64encode (str: string) {
   let out, i
   let c1, c2, c3
   const len = str.length
@@ -134,9 +127,9 @@ function base64encode (str) {
   return out
 }
 
-/** base64解码 */
+/** base64 decode */
 // eslint-disable-next-line no-unused-vars
-function base64decode (str) {
+function base64decode (str: string) {
   let c1, c2, c3, c4
   let i, out
   const len = str.length
@@ -174,8 +167,8 @@ function base64decode (str) {
   return out
 }
 
-/** 去除base64不安全的字符 */
-const safe64 = function (base64) {
+/** Removing base64 insecure characters */
+const safe64 = function (base64: string) {
   base64 = base64.replace(/\+/g, '-')
   base64 = base64.replace(/\//g, '_')
   return base64

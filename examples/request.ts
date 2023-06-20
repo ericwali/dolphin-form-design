@@ -24,7 +24,7 @@ service.interceptors.request.use(
   config => {
     log.warning('正在使用第三方axios请求,请求前配置处理完毕!')
     return config
-    // 经过对内部源码的剖析,内部采用Promise.resolve(config)链式调用,所以此处没有拒绝回调
+    // 经过对内部源码的剖析,内部采用Promise.resolve(widget-config)链式调用,所以此处没有拒绝回调
   }, undefined
 )
 

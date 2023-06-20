@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { detailDataType } from '@tools'
+import { dataTypeFormat } from '@tools'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Input',
@@ -169,7 +169,7 @@ export default {
       bindEvent(this, 'click', event)
     },
     handleChange (value) {
-      value = detailDataType(value, this.type)
+      value = dataTypeFormat(value, this.type)
       this.$emit('input', value)
       this.$emit('change', value)
     }
