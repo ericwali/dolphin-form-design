@@ -1,4 +1,4 @@
-import { LATIN_BURRING_MAPPING, KEY_WIDGET_CONFIG_NAME, KEY_COMPONENT_NAME } from '../form-design/src/constants'
+import { LATIN_DIACRITICAL_MAPPING, WIDGET_COMPONENT_NAME_PREFIX, COMPONENT_NAME_PREFIX } from '../form-design/src/constants'
 import { RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS, RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD } from '../form-design/src/constants/regex'
 import random from './random'
 import type { DolphinFieldsGroupProps, WidgetFormDefaultConfig, JsonOptionDefaultConfig, DataSource } from '../../types/form-design/setup'
@@ -28,20 +28,22 @@ export function deepClone<T>(obj: T): T {
   const type = getObjType(obj);
   if (type === 'array') {
     const newObj: any[] = [];
-    for (let i = 0, len = (obj as unknown as any[]).length; i < len; i++) {
-      if ((obj as unknown as any[])[i]) {
-        delete (obj as unknown as any[])[i].$parent;
+    const originObj = obj as unknown as any[]
+    for (let i = 0, len = originObj.length; i < len; i++) {
+      if (originObj[i]) {
+        delete originObj[i].$parent;
       }
-      newObj.push(deepClone((obj as unknown as any[])[i]));
+      newObj.push(deepClone(originObj[i]));
     }
     return newObj as unknown as T;
   } else if (type === 'object') {
     const newObj: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        delete (obj as any)[key].$parent;
+    const originObj = obj as unknown as any
+    for (const key in originObj) {
+      if (originObj.hasOwnProperty(key)) {
+        delete originObj[key].$parent;
       }
-      newObj[key] = deepClone((obj as any)[key]);
+      newObj[key] = deepClone(originObj[key]);
     }
     return newObj;
   } else {
@@ -238,70 +240,63 @@ export function urlJoin(base: string, url: string): string {
   return `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
 }
 
-/** 获取部件表单默认配置 */
-export function getWidgetFormDefaultConfig (): WidgetFormDefaultConfig {
-  return deepClone(GlobalConfig.widgetFormDefaultConfig)
-}
-
-/** 获取json选项默认配置 */
-export function getJsonOptionDefaultConfig (): JsonOptionDefaultConfig {
-  return deepClone(GlobalConfig.jsonOptionDefaultConfig)
-}
-
-/** 驼峰转下划线 */
-export function kebabCase (str) {
-  return createCompounder(str, (result, word, index) =>
-    result + (index ? '-' : '') + word.toLowerCase())
-}
-
-/** 下划线转驼峰 */
-export function camelCase (str) {
-  return createCompounder(str, (result, word, index) => {
-    word = word.toLowerCase()
-    return result + (index ? (word.charAt(0).toUpperCase() + word.slice(1)) : word)
-  })
+/**
+ * Converts a camelCase string to kebab-case.
+ * @param {string} str - The input string.
+ * @returns {string} - The kebab-case string.
+ */
+export function kebabCase(str: string): string {
+  return createCompounder(str, (result: string, word: string, index: number) =>
+    result + (index ? '-' : '') + word.toLowerCase());
 }
 
 /**
- * 创建字符串单词复合器
- * 字符串先按特定字符串的写法分割
- * 根据组合每个单词的函数进行复合
- *
- * @private
- * @param {string} [string=''] 要检查的字符串.
- * @param {Function} callback 组合每个单词的函数。
- * @returns {Function} 返回新的复合函数。
- * @example
- *
- * (wang xiang)
- * // => ['wang','xiang']
- *
- * ('wangXiang')
- * // => ['wang','Xiang']
- *
- * ('__WANG_XIANG__')
- * // => ['WANG','XIANG']
+ * Converts a snake_case string to camelCase.
+ * @param {string} str - The input string.
+ * @returns {string} - The camelCase string.
  */
-function createCompounder (string, callback) {
-  return arrayReduce(words(deburr(string).replace(RE_APOS, '')), callback, '')
+export function camelCase(str: string): string {
+  return createCompounder(str, (result: string, word: string, index: number) => {
+    word = word.toLowerCase();
+    return result + (index ? (word.charAt(0).toUpperCase() + word.slice(1)) : word);
+  });
+}
+
+
+/**
+ * Creates a string compounder by splitting
+ * the string based on a specific delimiter
+ * and applying a callback function to combine each word
+ *
+ * @param str The string to be processed
+ * @param callback The function to combine each word
+ * @returns string String after Compounder
+ */
+function createCompounder(str: string = '',
+                          callback: (accumulator: string, value: string, index: number, array: string[]) => string
+): string {
+  return arrayReduce(words(deburr(str).replace(RE_APOS, '')), callback, '')
 }
 
 /**
- * 数组累加器
- * 使用迭代函数进行迭代累加处理
- * @private
- * @param {Array} [array] 要迭代的数组.
- * @param {Function} iteratee 每次迭代调用的函数.
- * @param {*} [accumulator] 初始值.
- * @param {boolean} [initAccum] 指定使用 `array` 的第一个元素作为初始值.
- * @returns {*} 返回累计值.
+ * Array accumulator.
+ * Performs iterative accumulation using the provided iteratee function.
+ * @param array The array to iterate over.
+ * @param iteratee The function called on each iteration.
+ * @param accumulator The initial value.
+ * @param initAccum Specify whether to use the first element of `array` as the initial value.
+ * @returns T The accumulated value.
  */
-function arrayReduce (array, iteratee, accumulator, initAccum) {
-  let index = -1
-  const length = array == null ? 0 : array.length
-
+export function arrayReduce<T>(
+  array: T[],
+  iteratee: (accumulator: T, value: T, index: number, array: T[]) => T,
+  accumulator: T,
+  initAccum?: boolean
+): T {
+  let index = -1;
+  const length = array == null ? 0 : array.length;
   if (initAccum && length) {
-    accumulator = array[++index]
+      accumulator = array[++index];
   }
   while (++index < length) {
     accumulator = iteratee(accumulator, array[index], index, array)
@@ -310,93 +305,97 @@ function arrayReduce (array, iteratee, accumulator, initAccum) {
 }
 
 /**
- * 去除字符串中的一些毛刺
- * 带发音符号的拉丁字母,组合变音符号
+ * Removes diacritical marks from a string
  *
- * 替换说明:替换那些带发音符号的拉丁字母(á->a)
- * Latin-1补充块: https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table
- * 拉丁语扩展A块.: https://en.wikipedia.org/wiki/Latin_Extended-A
- * 删除说明:删除变音符号
- * 结合变音符号: https://en.wikipedia.org/wiki/Combining_Diacritical_Marks
- * @public
- * @param {string} [string='']  要去毛刺的字符串.
- * @returns {string} 返回去毛刺的字符串.
+ * Diacritical marks include accent marks and combining diacritical marks
+ * Replacement: Replace Latin characters with diacritical marks (á->a)
+ * Latin-1 Supplement Block: https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table
+ * Latin Extended-A Block: https://en.wikipedia.org/wiki/Latin_Extended-A
+ * Remove combining diacritical marks
+ * [Combining Diacritical Marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks)
+ *
+ * @param str The string to remove diacritical marks from
+ * @returns string The string without diacritical marks
  * @example
  *
- * deburr('wángxiáng');
- * // => 'wangxiang'
+ * deburr('wángxiáng4');
+ * => 'wangxiang4'
  */
-export function deburr (string) {
-  string = String(string)
-  return string && string.replace(RE_LATIN, (match) => BASIC_LATIN_MAPPING[match]).replace(RE_COMBO_RANGE, '')
+export function deburr(str: string): string {
+  return str && str.replace(RE_LATIN, (match) => LATIN_DIACRITICAL_MAPPING[match]).replace(RE_COMBO_RANGE, '')
 }
 
 /**
- * 将字符串拆分为其单词的数组
- *
- * @public
- * @param {string} [string=''] 要检查的字符串.
- * @param {RegExp|string} [pattern] 匹配单词的模式.
- * @returns {Array} 返回 `string` 的单词.
+ * Splits a string into an array of its words
+ * @param str The string to check
+ * @param pattern The pattern to match words
+ * @returns string[] The array of words from the string
  * @example
  *
- * 分割规则:可以使用(数学运算符,除了字母数字外的符号,常用标点符号,空白,驼峰命名写法,表情符号)分割
- * 具体实现请参考: RE_UNICODE_WORD正则表达式
- * 具体正则分割逻辑:
- * (?=' + [RS_BREAK, RS_UPPER, '$'].join('|')
- * (?=' + [RS_BREAK, RS_UPPER + RS_MISC_LOWER, '$'].join('|')
+ * Splitting rules: The string can be split using mathematical operators, symbols other
+ * than alphanumeric characters, common punctuation marks, whitespace, camelCase notation
+ * and emoticons.
  *
- * words('wangXiang')
- * // => ['wang', 'Xiang']
+ * words('fooBar')
+ * => ['foo', 'bar']
  *
- * words('wang&,&xiang')
- * // => ['wang', 'xiang']
+ * words('foo,bar')
+ * => ['foo', 'bar']
  *
- * words('wang&,&xiang', /[^, ]+/g)
- * // => ["'wang&", '&xiang']
+ * words('foo&,&bar', /[^, ]+/g)
+ * => ["'foo&", '&bar']
  */
-export function words (string, pattern) {
-  string = String(string)
+export function words(str: string, pattern?: RegExp | string): string[] {
   if (pattern === undefined) {
-    return RE_HAS_UNICODE_WORD.test(string)
-      ? string.match(RE_UNICODE_WORD) || []
-      : string.match(RE_ASCII_WORD) || []
+    return RE_HAS_UNICODE_WORD.test(str)
+      ? str.match(RE_UNICODE_WORD) || []
+      : str.match(RE_ASCII_WORD) || []
   }
-  return string.match(pattern) || []
+  return str.match(pattern) || []
 }
 
-/** 源组件名称 */
-export function originComponentName (name, type = 'config') {
-  const str = camelCase(name.replace(type === 'plugin' ? KEY_COMPONENT_NAME : KEY_COMPONENT_CONFIG_NAME, ''))
+/**
+ * Get the component name from a modified name
+ *
+ * @param name The Splice name
+ * @param type The type of the component
+ * @returns string The component name
+ */
+export function componentName(name: string, type: string = 'widget'): string {
+  const str = camelCase(name.replace(type === 'component' ? COMPONENT_NAME_PREFIX : WIDGET_COMPONENT_NAME_PREFIX, ''))
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-/** 对象迭代器  */
-export function objectEach (obj, iterate, context) {
-  if (obj) {
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        iterate.call(context, obj[key], key, obj)
-      }
+/**
+ * Iterate over the properties of an object.
+ *
+ * @param obj The object to iterate over.
+ * @param iterate The iterate function called for each property.
+ * @param void The context to use for the iterate function.
+ */
+export function objectEach(obj: Record<string, any>, iterate: Function, context?: any): void {
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      iterate.call(context, obj[key], key, obj);
     }
   }
 }
 
 /** 处理递归合并 */
-function handleDeepMerge (target, source) {
+function handleDeepMerge (target: any, source: any): any {
   const targetType = getObjType(target)
   const sourceType = getObjType(source)
   const toString = Object.prototype.toString
   if (targetType === 'array' && sourceType === 'array') {
     for (let i = 0, len = source.length; i < len; ++i) {
-      // 确保源数据类型完全一致性时才能合并
+      // Ensures that the source data type matches exactly before merging
       if (target[i] != null && toString.call(source[i]) !== toString.call(target[i])) continue
       target[i] = handleDeepMerge(target[i], source[i])
     }
     return target
   } else if (targetType === 'object' && sourceType === 'object') {
     for (const key in source) {
-      // 确保源数据类型完全一致性时才能合并
+      // Ensures that the source data type matches exactly before merging
       if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue
       target[key] = handleDeepMerge(target[key], source[key])
     }
@@ -405,34 +404,50 @@ function handleDeepMerge (target, source) {
   return source
 }
 
-/** 将一个或多个源对象合并到目标对象中(递归合并) */
-export function merge (target = {}, ...sources) {
+/**
+ * Merges multiple objects recursively.
+ *
+ * @param target - The target object to merge into.
+ * @param sources - The source objects to merge.
+ * @returns object - The merged object.
+ */
+export function merge(target: object = {}, ...sources: object[]): object {
   for (let index = 0; index < sources.length; ++index) {
-    const source = sources[index]
-    source && handleDeepMerge(target, source)
+    const source = sources[index];
+    source && handleDeepMerge(target, source);
   }
-  return target
+  return target;
 }
 
-/** 将一个或多个源对象复制到目标对象中 */
-export function assign (target = {}, ...sources) {
-  const toString = Object.prototype.toString
+/**
+ * Copies one or more source objects into a target object.
+ *
+ * @param target - The target object to copy into.
+ * @param sources - The source objects to copy.
+ * @returns object - The copied object.
+ */
+export function assign(target: Record<string, any> = {}, ...sources: Record<string, any>[]): object {
+  const toString = Object.prototype.toString;
   for (let index = 0; index < sources.length; ++index) {
-    const source = sources[index]
-    if (source) {
-      const keys = Object.keys(source)
-      for (let index = 0, len = keys.length; index < len; ++index) {
-        const key = keys[index]
-        // 确保源数据类型完全一致性时才能合并
-        if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue
-        target[key] = deepClone(source[key])
-      }
+    const source = sources[index];
+    const keys = Object.keys(source);
+    for (let index = 0, len = keys.length; index < len; ++index) {
+      const key = keys[index];
+      // Ensure that the source data type is identical for merging
+      if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue;
+      target[key] = deepClone(source[key]);
     }
   }
-  return target
+  return target;
 }
 
-/** 判断是否外部svg地址 */
-export function isExternal (path) {
-  return /^(https?:|mailto:|tel:)/.test(path)
+/**
+ * Checks if the path is an external SVG address.
+ *
+ * @param {string} path - The path to check.
+ * @returns {boolean} - `true` if the path is an external SVG address, `false` otherwise.
+ */
+export function isExternal(path: string): boolean {
+  return /^(https?:|mailto:|tel:)/.test(path);
 }
+

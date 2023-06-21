@@ -1,5 +1,5 @@
-export const KEY_COMPONENT_NAME: string = 'dolphin-'
-export const KEY_WIDGET_CONFIG_NAME = KEY_COMPONENT_NAME.concat('widget-config-')
+export const COMPONENT_NAME_PREFIX: string = 'dolphin-'
+export const WIDGET_COMPONENT_NAME_PREFIX = COMPONENT_NAME_PREFIX.concat('widget-config-')
 export const MULTIPLE_FEATURE_TYPES = ['cascader', 'select']
 export const RANGE_FEATURE_TYPES = ['slider', 'time']
 export const ARRAY_VALUE_TYPES = ['upload', 'checkbox', 'cascader', 'monthrange', 'daterange', 'datetimerange', 'dates', 'childForm']
@@ -49,7 +49,7 @@ export const DIC_PROPS = {
  * Latin alphabet mapping table with pronunciation symbols
  * (unicode Latin alphabet mapping with pronunciation symbols to basic Latin alphabet)
  */
-export const LATIN_BURRING_MAPPING = {
+export const LATIN_DIACRITICAL_MAPPING: { [key:string]: string } = {
   // Latin-1 supplementary blocks.
   '\xc0': 'A', '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',
   '\xe0': 'a', '\xe1': 'a', '\xe2': 'a', '\xe3': 'a', '\xe4': 'a', '\xe5': 'a',

@@ -33,6 +33,7 @@ import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
 import { coralLayoutRowDeepClone } from '@utils/layout'
+import { JsonOptionDefaultConfig, WidgetFormDefaultConfig } from '../../../types/form-design/setup';
 
 /** 获取控件默认提示 */
 export function getPlaceholder (item) {
@@ -401,4 +402,14 @@ export function remoteAccept (data, type) {
       else return ''
   }
   return undefined
+}
+
+/** 获取部件表单默认配置 */
+export function getWidgetFormDefaultConfig (): WidgetFormDefaultConfig {
+  return deepClone(GlobalConfig.widgetFormDefaultConfig)
+}
+
+/** 获取json选项默认配置 */
+export function getJsonOptionDefaultConfig (): JsonOptionDefaultConfig {
+  return deepClone(GlobalConfig.jsonOptionDefaultConfig)
 }
