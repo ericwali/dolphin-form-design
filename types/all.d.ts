@@ -1,4 +1,5 @@
 
+export {}
 
 declare global {
 
@@ -10,7 +11,7 @@ declare global {
   }
 
   interface Window {
-    log: any;
+    $Log: any;
   }
 
 }
