@@ -16,19 +16,15 @@
     "baseUrl": ".",
     "types": [
       "node",
-      "webpack-env",
-      "resize-observer-browser",
       "vite/client"
     ],
     "typeRoots": ["./node_modules/@types/", "./types"],
     "paths": {
-      "@/*": [
-        "examples/*"
-      ]
+      "@/*": ["examples/*"]
     },
     "lib": [
-      "esnext",
       "dom",
+      "esnext",
       "dom.iterable",
       "scripthost"
     ]
@@ -39,10 +35,9 @@
     "examples/**/*.ts",
     "examples/**/*.tsx",
     "examples/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "vite.config.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }

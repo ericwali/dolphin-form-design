@@ -1,4 +1,4 @@
-import * as LoquatFormDesignExport from './packages/all'
+import * as DolphinFormDesignExport from './packages/all'
 
 export * from './packages/all'
-export default LoquatFormDesignExport
+export default DolphinFormDesignExport

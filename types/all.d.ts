@@ -1,4 +1,5 @@
 
+
 declare global {
 
   declare type Nullable<T> = T | null
@@ -8,5 +9,8 @@ declare global {
     readonly [key: string]: T
   }
 
-}
+  interface Window {
+    log: any;
+  }
 
+}

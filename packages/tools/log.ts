@@ -1,19 +1,21 @@
-/**
- * @program: loquat-form-design
- *
- * @description: 日志工具类
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-07-15
- */
-const log = {}
+const log:{
+  capsule: Function;
+  colorful: Function;
+  default: Function;
+  primary: Function;
+  success: Function;
+  warning: Function;
+  danger: Function;
+} = {
+
+}
 
 /**
- * @description 返回这个样式的颜色值
- * @param {String} type 样式名称 [ primary | success | warning | danger | text ]
+ * Returns the color value of this style
+ * @param type Style name [ primary | success | warning | danger | text ]
+ * @return string
  */
-function typeColor (type = 'default') {
+function typeColor(type: string = 'default'): string {
   let color = ''
   switch (type) {
     case 'default':
@@ -38,12 +40,12 @@ function typeColor (type = 'default') {
 }
 
 /**
- * @description 打印一个 [ title | text ] 样式的信息
+ * Print a [ title | text ] style message
  * @param {String} title title text
  * @param {String} info info text
  * @param {String} type style
  */
-log.capsule = function (title, info, type = 'primary') {
+log.capsule = function (title: string, info: string, type = 'primary') {
   console.log(
     `%c ${title} %c ${info} %c`,
     'background:#35495E; padding: 1px; border-radius: 3px 0 0 3px; color: #fff;',
@@ -54,50 +56,41 @@ log.capsule = function (title, info, type = 'primary') {
   )
 }
 
-/**
- * @description 打印彩色文字
- */
-log.colorful = function (textArr) {
+/** Print color text */
+log.colorful = function (textArr: {
+  text: string;
+  type: string;
+}[]) {
   console.log(
     `%c${textArr.map(t => t.text || '').join('%c')}`,
     ...textArr.map(t => `color: ${typeColor(t.type)};`)
   )
 }
 
-/**
- * @description 打印 default 样式的文字
- */
-log.default = function (text) {
+/** Print default style text */
+log.default = function (text: string) {
   log.colorful([{ text }])
 }
 
-/**
- * @description 打印 primary 样式的文字
- */
-log.primary = function (text) {
+/** Print primary style text */
+log.primary = function (text: string) {
   log.colorful([{ text, type: 'primary' }])
 }
 
-/**
- * @description 打印 success 样式的文字
- */
-log.success = function (text) {
+/** Print success style text */
+log.success = function (text: string) {
   log.colorful([{ text, type: 'success' }])
 }
 
-/**
- * @description 打印 warning 样式的文字
- */
-log.warning = function (text) {
+/** Print warning style text */
+log.warning = function (text: string) {
   log.colorful([{ text, type: 'warning' }])
 }
 
-/**
- * @description 打印 danger 样式的文字
- */
-log.danger = function (text) {
+/** Print danger style text */
+log.danger = function (text: string) {
   log.colorful([{ text, type: 'danger' }])
 }
 
-window.$Log = log
+window.log = log
 export default log
