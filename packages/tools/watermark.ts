@@ -1,40 +1,45 @@
-/**
- * @program: loquat-form-design
- *
- * @description: 统一通用大水印
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-08-04
- */
+import { dataURLtoFile, randomId8 } from '../tools'
 
-import { randomId8, dataURLtoFile } from '@tools'
+export interface WaterMarkOption {
+  text?: string;
+  font?: string;
+  canvasWidth?: number;
+  canvasHeight?: number;
+  textAlign?: 'center' | 'end' | 'left' | 'right' | 'start';
+  textStyle?: string;
+  degree?: number;
+}
 
 /**
- * 全局大水印
- * @param {String} text    水印文本，默认'商用通用大水印'
- * @param {String} font    水印字体，默认'30px 黑体'
- * @param {Int} canvasWidth    单个水印容器宽度，默认500
- * @param {Int} canvasHeight    单个水印容器高度，默认200
- * @param {String} textAlign    水印文本对齐方式，默认'center'
- * @param {String} textStyle    水印文本样式，默认'rgba(100,100,100,0.15)'
- * @param {Int} degree    水印文本旋转角度，默认 -20
+ * Large global watermark
+ * @param text    Watermark text, default 'BusinessDolphinFormDesign'
+ * @param font    Watermark font, default '30px bold'
+ * @param canvasWidth    Single watermark container width, default 500
+ * @param canvasHeight    Single watermark container height, default 200
+ * @param textAlign    Watermark text alignment, default 'center'
+ * @param textStyle    Watermark text style, default 'rgba(100,100,100,0.15)'
+ * @param degree    Watermark text rotation angle, default -20
  */
 export class waterMark {
-  constructor (opt = {}) {
-    this.CONTAINERID = randomId8()
+
+  private readonly containerId: string;
+  private isObserver: boolean;
+  private option: WaterMarkOption = {};
+  private styleStr: string = '';
+
+  constructor(opt:WaterMarkOption) {
+    this.containerId = randomId8()
     this.drawCanvas = this.drawCanvas.bind(this)
     this.parentObserver = this.parentObserver.bind(this)
-    this.Repaint = this.Repaint.bind(this)
-    this.isOberserve = false
+    this.repaint = this.repaint.bind(this)
+    this.isObserver = false
     this.init(opt)
     this.drawCanvas()
     this.parentObserver()
   }
 
-  init (opt) {
-    this.option = {}
-    this.option.text = opt.text || '商用统一通用大水印'
+  init(opt: WaterMarkOption) {
+    this.option.text = opt.text || 'BusinessDolphinFormDesign'
     this.option.font = opt.font || '30px 黑体'
     this.option.canvasWidth = opt.canvasWidth || 500
     this.option.canvasHeight = opt.canvasHeight || 200
@@ -43,22 +48,22 @@ export class waterMark {
     this.option.degree = opt.degree || -20
   }
 
-  drawCanvas () {
-    this.isOberserve = true
+  drawCanvas() {
+    this.isObserver = true
     const divContainer = document.createElement('div')
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
-    divContainer.id = this.CONTAINERID
-
-    canvas.width = this.option.canvasWidth
-    canvas.height = this.option.canvasHeight
-    context.font = this.option.font
-    context.textAlign = this.option.textAlign
-    context.fillStyle = this.option.textStyle
-    context.translate(canvas.width / 2, canvas.height / 2)
-    context.rotate(this.option.degree * Math.PI / 180)
-    context.fillText(this.option.text, 0, 0)
-
+    divContainer.id = this.containerId
+    canvas.width = this.option.canvasWidth!
+    canvas.height = this.option.canvasHeight!
+    if (context) {
+      context.font = this.option.font!
+      context.textAlign = this.option.textAlign!
+      context.fillStyle = this.option.textStyle!
+      context.translate(canvas.width / 2, canvas.height / 2)
+      context.rotate(this.option.degree! * Math.PI / 180)
+      context.fillText(this.option.text!, 0, 0)
+    }
     const backgroundUrl = canvas.toDataURL('image/png')
     this.styleStr = `
             position:fixed;
@@ -73,26 +78,26 @@ export class waterMark {
     divContainer.setAttribute('style', this.styleStr)
     document.body.appendChild(divContainer)
     this.wmObserver(divContainer)
-    this.isOberserve = false
+    this.isObserver = false
   }
 
-  wmObserver (divContainer) {
+  wmObserver(divContainer: HTMLDivElement) {
     const wmConf = { attributes: true, childList: true, characterData: true }
     const wmObserver = new MutationObserver((mo) => {
-      if (!this.isOberserve) {
-        const _obj = mo[0].target
+      if (!this.isObserver) {
+        const _obj = mo[0].target as HTMLElement
         _obj.setAttribute('style', this.styleStr)
-        _obj.setAttribute('id', this.CONTAINERID)
+        _obj.setAttribute('id', this.containerId)
         wmObserver.takeRecords()
       }
     })
     wmObserver.observe(divContainer, wmConf)
   }
 
-  parentObserver () {
+  parentObserver() {
     const bodyObserver = new MutationObserver(() => {
-      if (!this.isOberserve) {
-        const __wm = document.querySelector(`#${this.CONTAINERID}`)
+      if (!this.isObserver) {
+        const __wm = document.querySelector(`#${this.containerId}`)
         if (!__wm) {
           this.drawCanvas()
         } else if (__wm.getAttribute('style') !== this.styleStr) {
@@ -100,74 +105,89 @@ export class waterMark {
         }
       }
     })
-    bodyObserver.observe(document.querySelector(`#${this.CONTAINERID}`).parentNode, { childList: true })
+    const parentNode = document.querySelector(`#${this.containerId}`)?.parentNode
+    parentNode && bodyObserver.observe(parentNode, { childList: true })
   }
 
-  Repaint (opt = {}) {
+  repaint(opt = {}) {
     this.remove()
     this.init(opt)
     this.drawCanvas()
   }
 
-  remove () {
-    this.isOberserve = true
-    const _wm = document.querySelector(`#${this.CONTAINERID}`)
-    _wm.parentNode.removeChild(_wm)
+  remove() {
+    this.isObserver = true
+    const _wm = document.querySelector(`#${this.containerId}`)
+    _wm?.parentNode?.removeChild(_wm)
   }
 }
 
-/** 图片加水印 */
-export function detailImg (file, option = {}) {
+export interface WaterMarkOption {
+  text?: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: number;
+  opacity?: number;
+  bottom?: number;
+  right?: number;
+  ratio?: number;
+  left?: number;
+  top?: number;
+}
+
+/** Image watermarking */
+export function detailImg (file: File, option:WaterMarkOption = {}) {
   const configDefault = {
     width: 200,
     height: 200
   }
   const config = {
-    text: '商用通用大水印', // 文字
-    fontFamily: 'microsoft yahei', // 字体
-    color: '#999', // 颜色
-    fontSize: 16, // 大小
-    opacity: 100, // 透明度
-    bottom: 10, // 下边位置
-    right: 10, // 右边位置
-    ratio: 1, // 压缩比
-    left: 0, // 左边位置
-    top: 0 // 上边位置
+    text: 'BusinessDolphinFormDesign',
+    fontFamily: 'microsoft yahei',
+    color: '#999',
+    fontSize: 16,
+    opacity: 100,
+    bottom: 10,
+    right: 10,
+    ratio: 1,
+    left: 0,
+    top: 0
   }
-  let canvas, ctx
+
+  let canvas: HTMLCanvasElement | null, ctx: CanvasRenderingContext2D | null;
   return new Promise(function (resolve, reject) {
     const { text, fontFamily, color, fontSize, opacity, bottom, right, ratio } = option
     initParams()
     fileToBase64(file, initImg)
-    // 参数初始化
+
     function initParams () {
-      config.text = text || config.text // 文字
-      config.fontFamily = fontFamily || config.fontFamily // 字体
-      config.color = color || config.color // 颜色
-      config.fontSize = fontSize || config.fontSize // 大小
-      config.opacity = opacity || config.opacity // 透明度
-      config.bottom = bottom || config.bottom // 下边位置
-      config.right = right || config.right // 右边位置
-      config.ratio = ratio || config.ratio // 压缩比
+      config.text = text || config.text
+      config.fontFamily = fontFamily || config.fontFamily
+      config.color = color || config.color
+      config.fontSize = fontSize || config.fontSize
+      config.opacity = opacity || config.opacity
+      config.bottom = bottom || config.bottom
+      config.right = right || config.right
+      config.ratio = ratio || config.ratio
     }
-    // 加载图片
-    function initImg (data) {
+
+    function initImg (data: string) {
       const img = new Image()
       img.src = data
       img.onload = function () {
         const width = img.width
         const height = img.height
         creteCanvas(width, height)
-        ctx.drawImage(img, 0, 0, width, height)
+        ctx?.drawImage(img, 0, 0, width, height)
         setText(width, height)
-        const files = dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, config.ratio), file.name)
-        document.getElementById('canvas').remove()
+        const files = dataURLtoFile((document.getElementById('canvas') as HTMLCanvasElement)?.toDataURL(file.type, config.ratio), file.name)
+        document.getElementById('canvas')?.remove()
         resolve(Object.assign(files, file))
       }
     }
-    // 创建画板
-    function creteCanvas (width, height) {
-      canvas = document.getElementById('canvas')
+
+    function creteCanvas (width: number, height: number) {
+      canvas = document.getElementById('canvas') as HTMLCanvasElement
       if (canvas === null) {
         canvas = document.createElement('canvas')
         canvas.id = 'canvas'
@@ -178,20 +198,23 @@ export function detailImg (file, option = {}) {
       canvas.width = width
       canvas.height = height
     }
-    // 添加水印
-    function setText (width, height) {
+
+    function setText (width: number, height: number) {
       const txt = config.text
       const param = calcParam(txt, width, height)
-      ctx.font = param.fontSize + 'px ' + config.fontFamily
-      ctx.fillStyle = config.color
-      ctx.globalAlpha = config.opacity / 100
-      ctx.fillText(txt, param.x, param.y)
+      if(ctx) {
+        ctx.font = param.fontSize + 'px ' + config.fontFamily
+        ctx.fillStyle = config.color
+        ctx.globalAlpha = config.opacity / 100
+        ctx.fillText(txt, param.x, param.y)
+      }
     }
-    // 计算比例
-    function calcParam (txt, width, height) {
+
+    // Calculation ratio
+    function calcParam (txt: string, width: number, height: number) {
       let x, y
 
-      // 字体的比例
+      // Proportion of fonts
       const calcFontSize = config.fontSize / configDefault.width
       const fontSize = calcFontSize * width
 
@@ -206,13 +229,13 @@ export function detailImg (file, option = {}) {
       } else {
         x = config.left
       }
-      ctx.font = config.fontSize + 'px ' + config.fontFamily
-      var txtWidth = Number(ctx.measureText(txt).width)
+      ctx && (ctx.font = config.fontSize + 'px ' + config.fontFamily)
+      const txtWidth = Number(ctx?.measureText(txt).width)
 
       x = x - txtWidth
 
-      var calcPosX = x / configDefault.width
-      var calcPosY = y / configDefault.height
+      const calcPosX = x / configDefault.width
+      const calcPosY = y / configDefault.height
 
       x = calcPosX * width
       y = calcPosY * height
@@ -222,12 +245,13 @@ export function detailImg (file, option = {}) {
         fontSize: fontSize
       }
     }
-    // file转base64
-    function fileToBase64 (file, callback) {
+
+    // File to base64
+    function fileToBase64 (file: File, callback: Function) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = function (e) {
-        callback(e.target.result)
+        callback(e.target?.result)
       }
     }
   })
