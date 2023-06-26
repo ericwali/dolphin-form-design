@@ -34,7 +34,6 @@ export function select (element: HTMLTextAreaElement) {
   return selectedText
 }
 
-
 /**
  * Browser clipboard
  * @param text
@@ -62,7 +61,7 @@ export default function ({ text }: {
       document.execCommand('copy')
       resolve('success')
     } catch (err) {
-      reject()
+      reject(new Error('Something went wrong'))
     }
   })
 }

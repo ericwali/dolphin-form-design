@@ -12,9 +12,9 @@ export function isDom (obj: any) {
   // type is function, so you can't use it to determine
   return typeof HTMLElement === 'object'
     ? (function () {
-      return obj instanceof HTMLElement
-    })()
+        return obj instanceof HTMLElement
+      })()
     : (function () {
-      return obj && typeof obj === 'object' && obj.nodeType === 1 && typeof obj.nodeName === 'string'
-    })()
+        return obj && typeof obj === 'object' && obj.nodeType === 1 && typeof obj.nodeName === 'string'
+      })()
 }

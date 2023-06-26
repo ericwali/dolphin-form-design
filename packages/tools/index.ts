@@ -24,31 +24,31 @@ export function setPx (val: number | string, defVal = ''): string {
  * @param obj Clone object
  * @return T new Object
  */
-export function deepClone<T>(obj: T): T {
-  const type = getObjType(obj);
+export function deepClone<T> (obj: T): T {
+  const type = getObjType(obj)
   if (type === 'array') {
-    const newObj: any[] = [];
+    const newObj: any[] = []
     const originObj = obj as unknown as any[]
     for (let i = 0, len = originObj.length; i < len; i++) {
       if (originObj[i]) {
-        delete originObj[i].$parent;
+        delete originObj[i].$parent
       }
-      newObj.push(deepClone(originObj[i]));
+      newObj.push(deepClone(originObj[i]))
     }
-    return newObj as unknown as T;
+    return newObj as unknown as T
   } else if (type === 'object') {
-    const newObj: any = {};
+    const newObj: any = {}
     const originObj = obj as unknown as any
     for (const key in originObj) {
-      if (originObj.hasOwnProperty(key)) {
-        delete originObj[key].$parent;
+      if (Object.prototype.hasOwnProperty.call(originObj, key)) {
+        delete originObj[key].$parent
       }
-      newObj[key] = deepClone(originObj[key]);
+      newObj[key] = deepClone(originObj[key])
     }
-    return newObj;
+    return newObj
   } else {
     // No longer has the next level
-    return obj;
+    return obj
   }
 }
 
@@ -57,7 +57,7 @@ export function deepClone<T>(obj: T): T {
  * @param obj object
  * @return string type strings
  */
-export function getObjType(obj: any): string {
+export function getObjType (obj: any): string {
   const toString = Object.prototype.toString
   const map: { [key: string]: string } = {
     '[object Boolean]': 'boolean',
@@ -83,26 +83,26 @@ export function getObjType(obj: any): string {
  * @param val value
  * @return boolean
  */
-export function validateNull(val: any): boolean {
+export function validateNull (val: any): boolean {
   // Special validate
-  if (val && parseInt(val) === 0) return false;
-  const list: string[] = ['$parent'];
+  if (val && parseInt(val) === 0) return false
+  const list: string[] = ['$parent']
   if (val instanceof Date || typeof val === 'boolean' || typeof val === 'number') {
-    return false;
+    return false
   }
   if (val instanceof Array) {
     if (val.length === 0) {
-      return true;
+      return true
     }
   } else if (val instanceof Object) {
-    val = deepClone(val);
+    val = deepClone(val)
     list.forEach(ele => {
-      delete val[ele];
-    });
-    for (const o in val) {
-      return false;
+      delete val[ele]
+    })
+    if (Object.keys(val).length === 0) {
+      return false
     }
-    return true;
+    return true
   } else {
     if (
       val === 'null' ||
@@ -111,11 +111,11 @@ export function validateNull(val: any): boolean {
       val === undefined ||
       val === ''
     ) {
-      return true;
+      return true
     }
-    return false;
+    return false
   }
-  return false;
+  return false
 }
 
 /**
@@ -123,16 +123,16 @@ export function validateNull(val: any): boolean {
  * @param val a[0].b.c
  * @return string[] (a,0,b,c)
  */
-export function pathFormat(val: string): string[] {
-  const result: string[] = [];
+export function pathFormat (val: string): string[] {
+  const result: string[] = []
   if (val.charCodeAt(0) === 46) {
-    result.push('');
+    result.push('')
   }
-  val.replace(RE_PROP_NAME,  (match: string, number: string, quote: string, subString: string) => {
-    result.push(quote ? subString.replace(/\\(\\)?/g, '$1') : (number || match));
-    return '';
-  });
-  return result;
+  val.replace(RE_PROP_NAME, (match: string, number: string, quote: string, subString: string) => {
+    result.push(quote ? subString.replace(/\\(\\)?/g, '$1') : (number || match))
+    return ''
+  })
+  return result
 }
 
 /**
@@ -142,20 +142,19 @@ export function pathFormat(val: string): string[] {
  * @param defaultValue
  * @return any
  */
-export function get(object: any, path: string, defaultValue: any): any {
-  if (validateNull(path)) return object;
-  const pathArray = /^\w*$/.test(path) ? [path] : pathFormat(path);
-  let index = 0;
-  const length = pathArray.length;
+export function get (object: any, path: string, defaultValue: any): any {
+  if (validateNull(path)) return object
+  const pathArray = /^\w*$/.test(path) ? [path] : pathFormat(path)
+  let index = 0
+  const length = pathArray.length
   while (object != null && index < length) {
-    object = object[pathArray[index++]];
+    object = object[pathArray[index++]]
   }
-  return object == null ? defaultValue : object;
+  return object == null ? defaultValue : object
 }
 
-
 /** Generate a random 8-bit ID */
-export function randomId8(): string {
+export function randomId8 (): string {
   return random(8)
 }
 
@@ -165,13 +164,13 @@ export function randomId8(): string {
  * @param value format type
  * @return T
  */
-export function dataTypeFormat<T = any>(value: any, type: string): T {
+export function dataTypeFormat<T = any> (value: any, type: string): T {
   if (type === 'number') {
-    return Number(value) as unknown as T;
+    return Number(value) as unknown as T
   } else if (type === 'string') {
-    return String(value) as unknown as T;
+    return String(value) as unknown as T
   } else {
-    return value as T;
+    return value as T
   }
 }
 
@@ -181,27 +180,26 @@ export function dataTypeFormat<T = any>(value: any, type: string): T {
  * @param filename FileName
  * @return File | null
  */
-export function dataURLtoFile(dataUrl: string, filename: string): File | null {
-  const arr = dataUrl.split(',');
+export function dataURLtoFile (dataUrl: string, filename: string): File | null {
+  const arr = dataUrl.split(',')
   // Get the MIME type from the data URL
-  const mimeMatch = arr[0].match(/:(.*?);/);
+  const mimeMatch = arr[0].match(/:(.*?);/)
   if (!mimeMatch) {
-    return null;
+    return null
   }
-  const mime = mimeMatch[1];
+  const mime = mimeMatch[1]
   // Decode the Base64 data
-  const buffStr = atob(arr[1]);
-  let n = buffStr.length;
+  const buffStr = atob(arr[1])
+  let n = buffStr.length
   // Convert binary data to UTF-8
-  const utf8Arr = new Uint8Array(n);
+  const utf8Arr = new Uint8Array(n)
   while (n--) {
-    utf8Arr[n] = buffStr.charCodeAt(n);
+    utf8Arr[n] = buffStr.charCodeAt(n)
   }
   return new File([utf8Arr], filename, {
-    type: mime,
-  });
+    type: mime
+  })
 }
-
 
 /**
  * Get file upload address
@@ -209,8 +207,8 @@ export function dataURLtoFile(dataUrl: string, filename: string): File | null {
  * @param uri The sub-address.
  * @returns The concatenated URL or an empty string.
  */
-export function getFileUrl(home: string, uri: string): string {
-  return uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri);
+export function getFileUrl (home: string, uri: string): string {
+  return uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri)
 }
 
 /**
@@ -219,14 +217,14 @@ export function getFileUrl(home: string, uri: string): string {
  * @param unit The unit of measurement (KB, MB, GB).
  * @returns The computed byte capacity.
  */
-export function byteCapacityCompute(fileSize: number, unit: 'KB' | 'MB' | 'GB'): number {
+export function byteCapacityCompute (fileSize: number, unit: 'KB' | 'MB' | 'GB'): number {
   switch (unit) {
     case 'KB':
-      return fileSize / 1024;
+      return fileSize / 1024
     case 'MB':
-      return fileSize / 1024 / 1024;
+      return fileSize / 1024 / 1024
     case 'GB':
-      return fileSize / 1024 / 1024 / 1024;
+      return fileSize / 1024 / 1024 / 1024
   }
 }
 
@@ -236,7 +234,7 @@ export function byteCapacityCompute(fileSize: number, unit: 'KB' | 'MB' | 'GB'):
  * @param url  SubUrl
  * @return string BaseUrlAndSubUrl
  */
-export function urlJoin(base: string, url: string): string {
+export function urlJoin (base: string, url: string): string {
   return `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
 }
 
@@ -245,9 +243,9 @@ export function urlJoin(base: string, url: string): string {
  * @param {string} str - The input string.
  * @returns {string} - The kebab-case string.
  */
-export function kebabCase(str: string): string {
+export function kebabCase (str: string): string {
   return createCompounder(str, (result: string, word: string, index: number) =>
-    result + (index ? '-' : '') + word.toLowerCase());
+    result + (index ? '-' : '') + word.toLowerCase())
 }
 
 /**
@@ -255,13 +253,12 @@ export function kebabCase(str: string): string {
  * @param {string} str - The input string.
  * @returns {string} - The camelCase string.
  */
-export function camelCase(str: string): string {
+export function camelCase (str: string): string {
   return createCompounder(str, (result: string, word: string, index: number) => {
-    word = word.toLowerCase();
-    return result + (index ? (word.charAt(0).toUpperCase() + word.slice(1)) : word);
-  });
+    word = word.toLowerCase()
+    return result + (index ? (word.charAt(0).toUpperCase() + word.slice(1)) : word)
+  })
 }
-
 
 /**
  * Creates a string compounder by splitting
@@ -272,8 +269,8 @@ export function camelCase(str: string): string {
  * @param callback The function to combine each word
  * @returns string String after Compounder
  */
-function createCompounder(str: string = '',
-                          callback: (accumulator: string, value: string, index: number, array: string[]) => string
+function createCompounder (str = '',
+  callback: (accumulator: string, value: string, index: number, array: string[]) => string
 ): string {
   return arrayReduce(words(deburr(str).replace(RE_APOS, '')), callback, '')
 }
@@ -287,16 +284,16 @@ function createCompounder(str: string = '',
  * @param initAccum Specify whether to use the first element of `array` as the initial value.
  * @returns T The accumulated value.
  */
-export function arrayReduce<T>(
+export function arrayReduce<T> (
   array: T[],
   iteratee: (accumulator: T, value: T, index: number, array: T[]) => T,
   accumulator: T,
   initAccum?: boolean
 ): T {
-  let index = -1;
-  const length = array == null ? 0 : array.length;
+  let index = -1
+  const length = array == null ? 0 : array.length
   if (initAccum && length) {
-      accumulator = array[++index];
+    accumulator = array[++index]
   }
   while (++index < length) {
     accumulator = iteratee(accumulator, array[index], index, array)
@@ -321,7 +318,7 @@ export function arrayReduce<T>(
  * deburr('wángxiáng4');
  * => 'wangxiang4'
  */
-export function deburr(str: string): string {
+export function deburr (str: string): string {
   return str && str.replace(RE_LATIN, (match) => LATIN_DIACRITICAL_MAPPING[match]).replace(RE_COMBO_RANGE, '')
 }
 
@@ -345,7 +342,7 @@ export function deburr(str: string): string {
  * words('foo&,&bar', /[^, ]+/g)
  * => ["'foo&", '&bar']
  */
-export function words(str: string, pattern?: RegExp | string): string[] {
+export function words (str: string, pattern?: RegExp | string): string[] {
   if (pattern === undefined) {
     return RE_HAS_UNICODE_WORD.test(str)
       ? str.match(RE_UNICODE_WORD) || []
@@ -361,7 +358,7 @@ export function words(str: string, pattern?: RegExp | string): string[] {
  * @param type The type of the component
  * @returns string The component name
  */
-export function componentName(name: string, type: string = 'widget'): string {
+export function componentName (name: string, type = 'widget'): string {
   const str = camelCase(name.replace(type === 'component' ? COMPONENT_NAME_PREFIX : WIDGET_COMPONENT_NAME_PREFIX, ''))
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -373,10 +370,10 @@ export function componentName(name: string, type: string = 'widget'): string {
  * @param iterate The iterate function called for each property.
  * @param void The context to use for the iterate function.
  */
-export function objectEach(obj: Record<string, any>, iterate: Function, context?: any): void {
+export function objectEach (obj: Record<string, any>, iterate: (value: any, key: string, obj: Record<string, any>) => void, context?: any): void {
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      iterate.call(context, obj[key], key, obj);
+      iterate.call(context, obj[key], key, obj)
     }
   }
 }
@@ -411,12 +408,12 @@ function handleDeepMerge (target: any, source: any): any {
  * @param sources - The source objects to merge.
  * @returns object - The merged object.
  */
-export function merge(target: object = {}, ...sources: object[]): object {
+export function merge (target: object = {}, ...sources: object[]): object {
   for (let index = 0; index < sources.length; ++index) {
-    const source = sources[index];
-    source && handleDeepMerge(target, source);
+    const source = sources[index]
+    source && handleDeepMerge(target, source)
   }
-  return target;
+  return target
 }
 
 /**
@@ -426,19 +423,19 @@ export function merge(target: object = {}, ...sources: object[]): object {
  * @param sources - The source objects to copy.
  * @returns object - The copied object.
  */
-export function assign(target: Record<string, any> = {}, ...sources: Record<string, any>[]): object {
-  const toString = Object.prototype.toString;
+export function assign (target: Record<string, any> = {}, ...sources: Record<string, any>[]): object {
+  const toString = Object.prototype.toString
   for (let index = 0; index < sources.length; ++index) {
-    const source = sources[index];
-    const keys = Object.keys(source);
+    const source = sources[index]
+    const keys = Object.keys(source)
     for (let index = 0, len = keys.length; index < len; ++index) {
-      const key = keys[index];
+      const key = keys[index]
       // Ensure that the source data type is identical for merging
-      if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue;
-      target[key] = deepClone(source[key]);
+      if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue
+      target[key] = deepClone(source[key])
     }
   }
-  return target;
+  return target
 }
 
 /**
@@ -447,7 +444,6 @@ export function assign(target: Record<string, any> = {}, ...sources: Record<stri
  * @param {string} path - The path to check.
  * @returns {boolean} - `true` if the path is an external SVG address, `false` otherwise.
  */
-export function isExternal(path: string): boolean {
-  return /^(https?:|mailto:|tel:)/.test(path);
+export function isExternal (path: string): boolean {
+  return /^(https?:|mailto:|tel:)/.test(path)
 }
-

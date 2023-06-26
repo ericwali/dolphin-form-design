@@ -10,6 +10,19 @@ export interface WaterMarkOption {
   degree?: number;
 }
 
+export interface DetailImgOption {
+  text?: string;
+  fontFamily?: string;
+  color?: string;
+  fontSize?: number;
+  opacity?: number;
+  bottom?: number;
+  right?: number;
+  ratio?: number;
+  left?: number;
+  top?: number;
+}
+
 /**
  * Large global watermark
  * @param text    Watermark text, default 'BusinessDolphinFormDesign'
@@ -21,13 +34,12 @@ export interface WaterMarkOption {
  * @param degree    Watermark text rotation angle, default -20
  */
 export class waterMark {
-
   private readonly containerId: string;
   private isObserver: boolean;
   private option: WaterMarkOption = {};
-  private styleStr: string = '';
+  private styleStr = '';
 
-  constructor(opt:WaterMarkOption) {
+  constructor (opt:WaterMarkOption) {
     this.containerId = randomId8()
     this.drawCanvas = this.drawCanvas.bind(this)
     this.parentObserver = this.parentObserver.bind(this)
@@ -38,7 +50,7 @@ export class waterMark {
     this.parentObserver()
   }
 
-  init(opt: WaterMarkOption) {
+  init (opt: WaterMarkOption) {
     this.option.text = opt.text || 'BusinessDolphinFormDesign'
     this.option.font = opt.font || '30px 黑体'
     this.option.canvasWidth = opt.canvasWidth || 500
@@ -48,7 +60,7 @@ export class waterMark {
     this.option.degree = opt.degree || -20
   }
 
-  drawCanvas() {
+  drawCanvas () {
     this.isObserver = true
     const divContainer = document.createElement('div')
     const canvas = document.createElement('canvas')
@@ -81,7 +93,7 @@ export class waterMark {
     this.isObserver = false
   }
 
-  wmObserver(divContainer: HTMLDivElement) {
+  wmObserver (divContainer: HTMLDivElement) {
     const wmConf = { attributes: true, childList: true, characterData: true }
     const wmObserver = new MutationObserver((mo) => {
       if (!this.isObserver) {
@@ -94,7 +106,7 @@ export class waterMark {
     wmObserver.observe(divContainer, wmConf)
   }
 
-  parentObserver() {
+  parentObserver () {
     const bodyObserver = new MutationObserver(() => {
       if (!this.isObserver) {
         const __wm = document.querySelector(`#${this.containerId}`)
@@ -109,34 +121,21 @@ export class waterMark {
     parentNode && bodyObserver.observe(parentNode, { childList: true })
   }
 
-  repaint(opt = {}) {
+  repaint (opt = {}) {
     this.remove()
     this.init(opt)
     this.drawCanvas()
   }
 
-  remove() {
+  remove () {
     this.isObserver = true
     const _wm = document.querySelector(`#${this.containerId}`)
     _wm?.parentNode?.removeChild(_wm)
   }
 }
 
-export interface WaterMarkOption {
-  text?: string;
-  fontFamily?: string;
-  color?: string;
-  fontSize?: number;
-  opacity?: number;
-  bottom?: number;
-  right?: number;
-  ratio?: number;
-  left?: number;
-  top?: number;
-}
-
 /** Image watermarking */
-export function detailImg (file: File, option:WaterMarkOption = {}) {
+export function detailImg (file: File, option:DetailImgOption = {}) {
   const configDefault = {
     width: 200,
     height: 200
@@ -154,7 +153,7 @@ export function detailImg (file: File, option:WaterMarkOption = {}) {
     top: 0
   }
 
-  let canvas: HTMLCanvasElement | null, ctx: CanvasRenderingContext2D | null;
+  let canvas: HTMLCanvasElement | null, ctx: CanvasRenderingContext2D | null
   return new Promise(function (resolve, reject) {
     const { text, fontFamily, color, fontSize, opacity, bottom, right, ratio } = option
     initParams()
@@ -171,9 +170,9 @@ export function detailImg (file: File, option:WaterMarkOption = {}) {
       config.ratio = ratio || config.ratio
     }
 
-    function initImg (data: string) {
+    function initImg (data: string | null) {
       const img = new Image()
-      img.src = data
+      img.src = data || ''
       img.onload = function () {
         const width = img.width
         const height = img.height
@@ -202,7 +201,7 @@ export function detailImg (file: File, option:WaterMarkOption = {}) {
     function setText (width: number, height: number) {
       const txt = config.text
       const param = calcParam(txt, width, height)
-      if(ctx) {
+      if (ctx) {
         ctx.font = param.fontSize + 'px ' + config.fontFamily
         ctx.fillStyle = config.color
         ctx.globalAlpha = config.opacity / 100
@@ -247,11 +246,11 @@ export function detailImg (file: File, option:WaterMarkOption = {}) {
     }
 
     // File to base64
-    function fileToBase64 (file: File, callback: Function) {
+    function fileToBase64 (file: File, callback: (result: string | null) => void) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = function (e) {
-        callback(e.target?.result)
+        callback(e.target?.result as string || null)
       }
     }
   })

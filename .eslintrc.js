@@ -1,15 +1,16 @@
-const { defineConfig } = require('eslint-define-config');
-module.exports =  defineConfig({
+const { defineConfig } = require('eslint-define-config')
+module.exports = defineConfig({
   root: true,
   env: {
-    node: true,
+    node: true
   },
-  parserOptions:{
+  parserOptions: {
     ecmaVersion: 2020
   },
   extends: [
     'plugin:vue/vue3-essential',
-    'plugin:@typescript-eslint/recommended',
+    '@vue/standard',
+    '@vue/typescript/recommended'
   ],
   rules: {
     'no-console': 'off',

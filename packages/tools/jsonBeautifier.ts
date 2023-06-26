@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-control-regex,no-misleading-character-class
 const escapable = /[\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g
 const keyable = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/
 let gap: string
@@ -32,7 +33,7 @@ export interface ConvertOptions {
   minify?: boolean;
 }
 
-export default function convert(object: any, options: ConvertOptions = {}): string {
+export default function convert (object: any, options: ConvertOptions = {}): string {
   const space = options.space || 2
   const dropQuotesOnKeys = options.dropQuotesOnKeys || false
   const dropQuotesOnNumbers = options.dropQuotesOnNumbers || false
@@ -52,7 +53,7 @@ export default function convert(object: any, options: ConvertOptions = {}): stri
       for (let i = 1; i < inlineShortArraysDepth; i++) {
         result = newResult
         newResult = inlineShortArraysInResult(result)
-        if (newResult == result) break
+        if (newResult === result) break
       }
     }
     result = newResult
@@ -62,7 +63,7 @@ export default function convert(object: any, options: ConvertOptions = {}): stri
 }
 
 /** Remove the quotation marks in the object value is a number */
-function walkObjectAndDropQuotesOnNumbers(object: any): void {
+function walkObjectAndDropQuotesOnNumbers (object: any): void {
   if (!isObject(object)) return
   const keys = Object.keys(object)
   if (!keys) return
@@ -78,15 +79,15 @@ function walkObjectAndDropQuotesOnNumbers(object: any): void {
   })
 }
 
-function isObject(o: any): boolean {
+function isObject (o: any): boolean {
   return o && typeof o === 'object'
 }
 
 /** When the length of the array does not exceed the specified width collapse the array, that is, into a line, characters (including indentation) */
-function inlineShortArraysInResult(result: string, width?: number): string {
+function inlineShortArraysInResult (result: string, width?: number): string {
   width || (width = 80)
   if (typeof width !== 'number' || width < 20) {
-    throw "Invalid width '" + width + "'. Expecting number equal or larger than 20."
+    throw Error("Invalid width '" + width + "'. Expecting number equal or larger than 20.")
   }
   const list = result.split('\n')
   let i = 0
@@ -123,7 +124,7 @@ function inlineShortArraysInResult(result: string, width?: number): string {
  * Default substitution methods can be provided. The use of spatial parameters can
  * Generate more readable text.
  */
-function stringify(
+function stringify (
   value: any,
   replacer?: ((key: string, value: any) => any) | (string | number)[],
   space?: string | number,
@@ -145,20 +146,20 @@ function stringify(
   }
 
   // If a replacer is provided, it must be a function or an array; otherwise, throw an error.
-  rep = replacer;
+  rep = replacer
   if (
     replacer &&
     typeof replacer !== 'function' &&
     (typeof replacer !== 'object' || typeof replacer.length !== 'number')
   ) {
-    throw new Error('JSON.stringify');
+    throw new Error('JSON.stringify')
   }
 
   // Return the result of stringIfyIng the value, creating a fake root object under the key ''.
-  return str('', { '': value }, dropQuotesOnKeys ?? false, quoteType ?? 'double');
+  return str('', { '': value }, dropQuotesOnKeys ?? false, quoteType ?? 'double')
 }
 
-function str(
+function str (
   key: string,
   holder: any,
   dropQuotesOnKeys: boolean,
@@ -255,7 +256,7 @@ function str(
   }
 }
 
-function quote(string: string, quoteType: 'single' | 'double'): string {
+function quote (string: string, quoteType: 'single' | 'double'): string {
   // If the string doesn't contain control characters, quote characters,
   // and backslash characters, we can safely surround it with quotes
   // Otherwise, we need to replace problematic characters with safe escapes
@@ -272,7 +273,7 @@ function quote(string: string, quoteType: 'single' | 'double'): string {
   // If the character replacement is not found, generate the corresponding Unicode code point.
   return escapable.test(string)
     ? surroundingQuote +
-      string.replace(escapable,(a) => {
+      string.replace(escapable, (a) => {
         const c = meta[a]
         return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4)
       }) +
@@ -280,6 +281,6 @@ function quote(string: string, quoteType: 'single' | 'double'): string {
     : surroundingQuote + string + surroundingQuote
 }
 
-function condQuoteKey(string: string, quoteType: 'single' | 'double'): string {
+function condQuoteKey (string: string, quoteType: 'single' | 'double'): string {
   return keyable.test(string) ? string : quote(string, quoteType)
 }

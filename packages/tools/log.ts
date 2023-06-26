@@ -1,12 +1,12 @@
 
 const log:{
-  capsule: Function;
-  colorful: Function;
-  default: Function;
-  primary: Function;
-  success: Function;
-  warning: Function;
-  danger: Function;
+  capsule: (title: string, info: string, type: string) => void;
+  colorful: (textArr: { text: string; type?: string; }[]) => void;
+  default: (text: string) => void;
+  primary: (text: string) => void;
+  success: (text: string) => void;
+  warning: (text: string) => void;
+  danger: (text: string) => void;
 } = {
   /**
    * Print a [ title | text ] style message
@@ -27,7 +27,7 @@ const log:{
   /** Print color text */
   colorful: (textArr: {
     text: string;
-    type: string;
+    type?: string;
   }[]) => {
     console.log(
       `%c${textArr.map(t => t.text || '').join('%c')}`,
@@ -61,7 +61,7 @@ const log:{
  * @param type Style name [ primary | success | warning | danger | text ]
  * @return string
  */
-function typeColor(type: string = 'default'): string {
+function typeColor (type = 'default'): string {
   let color = ''
   switch (type) {
     case 'default':

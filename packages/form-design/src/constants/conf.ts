@@ -1,9 +1,9 @@
 import { DolphinFormDesignGlobalConfig, WidgetFormDefaultConfig } from '../../../../types/form-design/setup'
 import fields from '../components/fields'
-import getToken from '../../../tools/qiniuOss';
+import getToken from '../../../tools/qiniuOss'
 
 export const GlobalConfig: DolphinFormDesignGlobalConfig = {
-  axiosInstance: () => {},
+  axiosInstance: null,
   fields,
   qiniu: {
     up: 'https://upload.qiniup.com',
@@ -42,9 +42,9 @@ export const GlobalConfig: DolphinFormDesignGlobalConfig = {
     customClass: [],
     eventScript: [
       {
-        'key': 'mounted',
-        'name': 'mounted',
-        'func': ''
+        key: 'mounted',
+        name: 'mounted',
+        func: ''
       }
     ],
     dataSource: [
@@ -78,22 +78,21 @@ export const GlobalConfig: DolphinFormDesignGlobalConfig = {
   },
   /** More config ref :https://github.com/beautify-web/js-beautify */
   beautifierDefaultsConf: {
-    'indent_size': 2,
-    'indent_char': ' ',
-    'max_preserve_newlines': 0,
-    'preserve_newlines': false,
-    'keep_array_indentation': false,
-    'break_chained_methods': false,
-    'brace_style': 'end-expand',
-    'space_before_conditional': true,
-    'unescape_strings': false,
-    'jslint_happy': false,
-    'end_with_newline': true,
-    'wrap_line_length': 110,
-    'indent_inner_html': true,
-    'comma_first': false,
-    'e4x': true,
-    'indent_empty_lines': true
+    indent_size: 2,
+    indent_char: ' ',
+    max_preserve_newlines: 0,
+    preserve_newlines: false,
+    keep_array_indentation: false,
+    break_chained_methods: false,
+    brace_style: 'end-expand',
+    space_before_conditional: true,
+    unescape_strings: false,
+    jslint_happy: false,
+    end_with_newline: true,
+    wrap_line_length: 110,
+    comma_first: false,
+    e4x: true,
+    indent_empty_lines: true
   },
   defaultRemoteOption: {
     optionDefault: [
@@ -103,7 +102,7 @@ export const GlobalConfig: DolphinFormDesignGlobalConfig = {
     ]
   },
   defaultRemoteFunc: {
-    funcDefault ():  { value: any; label: any; }[] {
+    funcDefault (): { value: any; label: any; }[] {
       return [
         { value: 'Foobar1', label: 'Foobar1' },
         { value: 'Foobar2', label: 'Foobar2' },

@@ -1,8 +1,10 @@
-import { defineComponent, computed, unref, reactive } from 'vue';
-import { FormDesignReactData } from '../../types/form-design'
-import GlobalConfig from '../global/widget-config'
-import { getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from '../tools'
+import { defineComponent, computed, unref, reactive, watch, toRefs } from 'vue';
+import { CustomFieldsProps, FormDesignReactData } from '../../types/form-design'
+import { deepClone, getObjType, validateNull } from '../tools'
 import codeBeautifier from 'js-beautify';
+import beautifier from '../tools/jsonBeautifier'
+import GlobalConfig from './src/constants/conf'
+import { getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from './src/formats'
 
 export default defineComponent({
   name: 'FormDesign',
@@ -40,17 +42,17 @@ export default defineComponent({
     includeFields: {
       type: Array,
       default: () => {
-       /* const arr = []
+        const arr = []
         GlobalConfig.fields.forEach(f => {
           f.list.forEach(c => {
             arr.push(c.type)
           })
         })
-        return arr*/
+        return arr
       }
     },
     customFields: {
-      type: Array,
+      type: Array as PropType<CustomFieldsProps[]>,
       default: () => []
     }
   },
@@ -99,7 +101,7 @@ export default defineComponent({
       childFormModelVisible: false
     })
 
-    const plugin = computed(() => state.widgetFormSelect.plugin)
+    const componentProp = computed(() => state.widgetFormSelect.componentProp)
 
     const leftWidth = computed(() => {
       if (typeof props.asideLeftWidth === 'string') {
@@ -114,8 +116,8 @@ export default defineComponent({
     })
 
     const getCustomFields = computed(() => {
-      const customFields = deepClone(this.customFields)
-      // 处理第三方传入的自定义属性与自定义事件代码美化
+      const customFields = deepClone(props.customFields)
+      // Handle external custom properties and custom event code beautification
       customFields.forEach(item => {
         getObjType(item.list) === 'array' && item.list.forEach(field => {
           !validateNull(field.params)
@@ -126,6 +128,29 @@ export default defineComponent({
       })
       return customFields
     })
+
+    watch( () => props.options, (val) => {
+
+    }, { deep: true });
+
+
+
+
+    /** 设置部件表单数据 */
+    function setWidgetFormJson (data) {
+      let options = data
+      if (typeof options === 'string') {
+        try {
+          options = eval('(' + options + ')')
+        } catch (e) {
+          console.error('非法配置')
+          options = { column: [] }
+        }
+      }
+      const defaultWidgetForm = getWidgetFormDefaultConfig()
+      this.widgetForm = deepClone({ ...defaultWidgetForm, ...options })
+    }
+
 
     const renderVN = () => (
       <el-container className={['form-designer', state.formId]}>

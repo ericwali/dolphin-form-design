@@ -19,7 +19,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         type: 'text',
         value: '',
         prepend: '',
@@ -51,7 +51,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         type: 'textarea',
         value: '',
         placeholder: '',
@@ -77,7 +77,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         value: 0,
         minRows: 0,
         maxRows: 9,
@@ -115,7 +115,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         value: '',
         multiple: false,
         disabled: false,
@@ -165,7 +165,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         value: '',
         disabled: false,
         showLabel: false,
@@ -205,7 +205,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         value: [],
         disabled: false,
         showLabel: false,
@@ -232,7 +232,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         value: '',
         format: 'HH:mm:ss',
         valueFormat: 'HH:mm:ss',
@@ -266,7 +266,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         type: 'date',
         value: '',
         format: 'yyyy-MM-dd',
@@ -295,7 +295,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         max: 5,
         value: 0,
         labelWidth: '',
@@ -317,7 +317,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         value: '',
         showAlpha: false,
         disabled: false,
@@ -339,7 +339,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         value: false,
         disabled: false
       }
@@ -357,7 +357,7 @@ export default [
       events: {
         change: ''
       },
-      plugin: {
+      componentProp: {
         value: 0,
         min: 0,
         max: 100,
@@ -376,7 +376,7 @@ export default [
       hide: false,
       hideLabel: false,
       customClass: [],
-      plugin: {
+      componentProp: {
         value: 'This is a text',
         effect: 'light',
         effectType: 'default',
@@ -406,7 +406,7 @@ export default [
         uploadError: '',
         uploadRemove: ''
       },
-      plugin: {
+      componentProp: {
         action: 'http://localhost:8888/common/upload',
         headers: [],
         data: [],
@@ -491,7 +491,7 @@ export default [
         focus: '',
         blur: ''
       },
-      plugin: {
+      componentProp: {
         value: [],
         multiple: false,
         disabled: false,
@@ -523,7 +523,7 @@ export default [
         'row-add': '',
         'row-del': ''
       },
-      plugin: {
+      componentProp: {
         value: [],
         option: {
           formWidth: '',
